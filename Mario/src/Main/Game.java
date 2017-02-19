@@ -33,6 +33,11 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage image;
 	
 	public static int coins = 0;
+	public static int lives = 3;
+	public static int deathScreenTime = 0;
+	
+	public static boolean showDeathScreen = true;
+	public static boolean gameOver = false;
 	
 	public static Handler handler;
 	public static SpriteSheet sheet;
@@ -88,7 +93,6 @@ public class Game extends Canvas implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		handler.createLevel(image);
 		
 	}
 	
@@ -154,13 +158,29 @@ public class Game extends Canvas implements Runnable {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
 		//Coin counter
-		g.drawImage(Game.coin.getBufferedImage(),20,20,75,75,null);
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("Courier",Font.BOLD,50));
-		g.drawString("x" + coins, 135, 95);
-		
+		if(!showDeathScreen) {
+			g.drawImage(Game.coin.getBufferedImage(),20,20,75,75,null);
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("Courier",Font.BOLD,50));
+			g.drawString("x" + coins, 100, 95);
+		}
+		//Death screen and game over screen
+		if(showDeathScreen) {
+			if(!gameOver) {
+				g.setColor(Color.WHITE);
+				g.setFont(new Font("Courier",Font.BOLD,50));
+				g.drawImage(Game.player[0].getBufferedImage(),500,300,100,100,null);
+				g.drawString("x" + lives, 610, 370);
+			}else {
+				g.setColor(Color.WHITE);
+				g.setFont(new Font("Courier",Font.BOLD,50));
+				g.drawString("Game Over", 420, 370);
+			}
+
+		}
+
 		g.translate(cam.getX(), cam.getY());
-		handler.render(g);
+		if(!showDeathScreen)handler.render(g);
 		g.dispose();
 		bs.show();
 	}
@@ -176,10 +196,17 @@ public class Game extends Canvas implements Runnable {
 	public void tick() {
 		handler.tick();
 		
-		for(Entity e:handler.entity) {
-			if(e.getId()==Id.player) {
-				if(!e.goingDownPipe) cam.tick(e);
+		for(Entity en:handler.entity) {
+			if(en.getId()==Id.player) {
+				if(!en.goingDownPipe) cam.tick(en);
 			}
+		}
+		if(showDeathScreen&&!gameOver) deathScreenTime++;
+		if(deathScreenTime>=180) {
+			showDeathScreen = false;
+			deathScreenTime = 0;
+			handler.clearLevel();
+			handler.createLevel(image);
 		}
 	}
 	

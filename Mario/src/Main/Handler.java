@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import block.Block;
-import block.Coin;
 import block.Dirt;
 import block.Pipe;
 import block.PowerUpBlock;
 import block.Wall;
+import entity.Coin;
 import entity.Entity;
 import entity.powerup.Mushroom;
 import mob.Enemy;
@@ -73,16 +73,19 @@ public class Handler {
 				int blue = (pixel) & 0xff;
 				//Defines the rgb values and what it creates on the map of everything you draw on level.png
 				if(red==0&&green==0&&blue==0) addBlock(new Wall(x*64,y*64,64,64,true,Id.wall,this));
-				if(red==0&&green==0&&blue==255) addEntity(new Player(x*64,y*64,64,64,Id.player,this,64));
+				if(red==0&&green==0&&blue==255) addEntity(new Player(x*64,y*64,48,48,Id.player,this,64));
 				if(red==255&&green==0&&blue==0) addEntity(new Mushroom(x*64,y*64,64,64,Id.mushroom,this,64));
 				if(red==51&&green==25&&blue==0) addBlock(new Dirt(x*64,y*64,64,64,true,Id.dirt,this));
 				if(red==0&&green==255&&blue==0) addEntity(new Enemy(x*64,y*64,64,64,Id.enemy,this,64));
 				if(red==255&&green==255&&blue==0) addBlock(new PowerUpBlock(x*64,y*64,64,64,true,Id.powerUp,this,Game.mushroom));
 				if(red==0&&(green>123&&green<129)&&blue==0) addBlock(new Pipe(x*64,y*64,64,15,true,Id.pipe,this,128-green));
-				if(red==255&&green==255&&blue==133) addBlock(new Coin(x*64,y*64,64,64,true,Id.coin,this));
+				if(red==255&&green==255&&blue==133) addEntity(new Coin(x*64,y*64,64,64,true,Id.coin,this));
 			}
 		}
 	}
-
+	public void clearLevel() {
+		entity.clear();
+		block.clear();
+	}
 
 }

@@ -2,6 +2,8 @@ package entity;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+
+import Main.Game;
 import Main.Handler;
 import Main.Id;
 
@@ -11,12 +13,16 @@ public abstract class Entity {
 	public int width, height;
 	public int originalWidth;
 	public int facing = 0; // 0 left, 1 right
+	public int hp;
+	public int phaseTime;
 	
+	public boolean jumping = false, falling = true;
 	public boolean goingDownPipe = false;
-	public boolean jumping = false;
-	public boolean falling = true;
+	public boolean attackable = false;
+
 	public int velX, velY;
 	public Id id;
+	public BossState bossState;
 	public double gravity = 0.0;
 	public Handler handler;
 	
@@ -40,7 +46,12 @@ public abstract class Entity {
 	//death
 	public void die() {
 		handler.removeEntity(this);
-		
+		if(getId()==Id.player) {
+			Game.lives--;
+			Game.showDeathScreen = true;
+			if(Game.lives>=0)Game.gameOver = true;
+		}
+
 	}
 	
 	public int getX() {

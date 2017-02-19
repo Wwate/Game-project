@@ -1,21 +1,23 @@
-package block;
+package entity;
 
 import java.awt.Graphics;
 
 import Main.Game;
 import Main.Handler;
 import Main.Id;
+import block.Block;
 
-public class Coin extends Block {
+public class Coin extends Entity {
 	
+	public Coin(int x, int y, int width, int height, boolean b, Id coin, Handler handler) {
+		super(x, y, width, height, b, coin, handler);
+	}
+
 	//private int frame = 0;
 	//private int frameDelay = 0;
 	//private boolean animate = false;
 
-	public Coin(int x, int y, int width, int height, boolean solid, Id id, Handler handler) {
-		super(x, y, width, height, solid, id, handler);
-	
-	}
+
 
 	public void render(Graphics g) {
 		g.drawImage(Game.coin.getBufferedImage(), x,y,width,height,null);

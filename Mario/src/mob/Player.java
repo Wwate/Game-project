@@ -56,11 +56,12 @@ public class Player extends Entity {
 					gravity = 0.8;
 					falling = true;
 						}
+						
 			//Commented the lines below to remove bug where the player teleports when colliding with powerUpBlock
 			//if(!bl.isSolid()&&!goingDownPipe) {
 			//if(bl.getId()==Id.wall) {	
 			
-				if(getBoundsTop().intersects(bl.getBounds())&&bl.getId()!=Id.coin) {
+				if(getBoundsTop().intersects(bl.getBounds())) {
 					setVelY(0);
 					
 					
@@ -74,7 +75,7 @@ public class Player extends Entity {
 				}					
 			
 				
-				if(getBoundsBottom().intersects(bl.getBounds())&&bl.getId()!=Id.coin) {
+				if(getBoundsBottom().intersects(bl.getBounds())) {
 					setVelY(0);
 					if(falling) falling = false;
 					
@@ -83,11 +84,11 @@ public class Player extends Entity {
 						falling = true;
 					}
 				}
-				if(getBoundsLeft().intersects(bl.getBounds())&&bl.getId()!=Id.coin) {
+				if(getBoundsLeft().intersects(bl.getBounds())) {
 					setVelX(0);
 					x = bl.getX()+bl.width;
 				}
-				if(getBoundsRight().intersects(bl.getBounds())&&bl.getId()!=Id.coin) {
+				if(getBoundsRight().intersects(bl.getBounds())) {
 					setVelX(0);
 					//collision fix by Aleksi
 					if (getWidth() > getOriginalWidth()) {
@@ -97,12 +98,7 @@ public class Player extends Entity {
 					else {
 						x = bl.getX()-bl.width;
 					}
-					//When you touch the coin it should disappear and add +1 to the counter
-					//Not Working at the moment
-					if(getBounds().intersects(bl.getBounds())&&bl.getId()==Id.coin) {
-						Game.coins++;
-						bl.die();
-					}
+					
 					
 				}
 				
@@ -116,10 +112,12 @@ public class Player extends Entity {
 				if(getBounds().intersects(en.getBounds())) {
 					int tpX = getX();
 					int tpY = getY();
+					width+=(width/3);
+					height+=(height/3);
 					//width*=2;
 					//height*=2;
-					setWidth(2);
-					setHeigth(2);
+					//setWidth(2);
+					//setHeigth(2);
 					//fixed player offset when erecting to bigger size
 					setX(tpX-getWidth()-(getWidth() / -2));
 					setY(tpY-getHeight()-(getHeight() / -2));
@@ -134,8 +132,8 @@ public class Player extends Entity {
 				} else if(getBounds().intersects(en.getBounds())) {
 					if(state==PlayerState.BIG) {
 						state = PlayerState.SMALL;
-						width/=2;
-						height/=2;
+						width/=3;
+						height/=3;
 						x+=width;
 						y+=height;
 				}
@@ -144,25 +142,30 @@ public class Player extends Entity {
 					die();
 				}
 			}
+		}else if(en.getId()==Id.coin) {
+			if(getBounds().intersects(en.getBounds())&&en.getId()==Id.coin) {
+				Game.coins++;
+				en.die();
+			}
 		}
 		}
 		//Gravity loop
 		if(jumping&&!goingDownPipe) {
-			gravity-=0.1;
+			gravity-=0.17;
 			setVelY((int)-gravity);
-			if(gravity<=0.0) {
+			if(gravity<=0.5) {
 				jumping = false;
 				falling = true;
 			}
 		}
 		if(falling&&!goingDownPipe) {
-			gravity+=0.1;
+			gravity+=0.17;
 			setVelY((int)gravity);
 		}
 		
 		if(animate) {
 			frameDelay++;
-			if(frameDelay>=3) {
+			if(frameDelay>=10) {
 				frame++;
 				if(frame>=5) {
 					frame = 0;
