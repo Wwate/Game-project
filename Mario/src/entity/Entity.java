@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import Main.Game;
 import Main.Handler;
 import Main.Id;
+import states.BossState;
 
 public abstract class Entity {
 	

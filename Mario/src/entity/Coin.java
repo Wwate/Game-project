@@ -9,8 +9,10 @@ import block.Block;
 
 public class Coin extends Entity {
 	
-	public Coin(int x, int y, int width, int height, boolean b, Id coin, Handler handler) {
-		super(x, y, width, height, b, coin, handler);
+
+	public Coin(int x, int y, int width, int height, Id id, Handler handler, int originalWidth) {
+		super(x, y, width, height, id, handler, originalWidth);
+
 	}
 
 	//private int frame = 0;

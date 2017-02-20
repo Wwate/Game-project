@@ -14,6 +14,7 @@ import entity.Entity;
 import entity.powerup.Mushroom;
 import mob.Enemy;
 import mob.Player;
+import mob.TowerBoss;
 
 public class Handler {
 	//Fixed the bug where you get error when player touches the enemy
@@ -79,7 +80,8 @@ public class Handler {
 				if(red==0&&green==255&&blue==0) addEntity(new Enemy(x*64,y*64,64,64,Id.enemy,this,64));
 				if(red==255&&green==255&&blue==0) addBlock(new PowerUpBlock(x*64,y*64,64,64,true,Id.powerUp,this,Game.mushroom));
 				if(red==0&&(green>123&&green<129)&&blue==0) addBlock(new Pipe(x*64,y*64,64,15,true,Id.pipe,this,128-green));
-				if(red==255&&green==255&&blue==133) addEntity(new Coin(x*64,y*64,64,64,true,Id.coin,this));
+				if(red==255&&green==255&&blue==133) addEntity(new Coin(x*64,y*64,64,64,Id.coin,this,64));
+				if(red==255&&green==0&&blue==255) addEntity(new TowerBoss(x*64,y*64,64,64,Id.towerBoss,this,3));
 			}
 		}
 	}

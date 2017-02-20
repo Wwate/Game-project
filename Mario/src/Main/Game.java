@@ -14,7 +14,9 @@ import block.Wall;
 import entity.Entity;
 import graphics.Sprite;
 import graphics.SpriteSheet;
+import gui.Launcher;
 import input.KeyInputs;
+import input.MouseInput;
 import mob.Player;
 
 public class Game extends Canvas implements Runnable {
@@ -38,10 +40,13 @@ public class Game extends Canvas implements Runnable {
 	
 	public static boolean showDeathScreen = true;
 	public static boolean gameOver = false;
+	public static boolean playing = false;
 	
 	public static Handler handler;
 	public static SpriteSheet sheet;
 	public static Camera cam;
+	public static Launcher launcher;
+	public static MouseInput mouse;
 	//Coin animation Sprite
 	//public static Sprite coin[] = new Sprite[3];
 	public static Sprite coin;
@@ -65,11 +70,15 @@ public class Game extends Canvas implements Runnable {
 		handler = new Handler();
 		sheet = new SpriteSheet("/spritesheet.png");
 		cam = new Camera();
+		launcher = new Launcher();
+		mouse = new MouseInput();
 		mushroom = new Sprite(sheet,3,1);
 		coin = new Sprite(sheet,8,1);
 		enemy = new Sprite[10];
 		
 		addKeyListener(new KeyInputs());
+		addMouseListener(mouse);
+		addMouseMotionListener(mouse);
 		//Grass graphics from spritesheet
 		grass = new Sprite(sheet,5,1);
 		powerUp = new Sprite(sheet,6,1);
@@ -89,7 +98,7 @@ public class Game extends Canvas implements Runnable {
 			//coin[i] = new Sprite(sheet,i+8,1);
 		//}
 		try {
-			image = ImageIO.read(getClass().getResource("/level.png"));
+			image = ImageIO.read(getClass().getResource("/bossTest.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -179,24 +188,26 @@ public class Game extends Canvas implements Runnable {
 
 		}
 
-		g.translate(cam.getX(), cam.getY());
-		if(!showDeathScreen)handler.render(g);
+		if(playing)g.translate(cam.getX(), cam.getY());
+		if(!showDeathScreen&&playing)handler.render(g);
+		else if(!playing) launcher.render(g);
 		g.dispose();
 		bs.show();
 	}
 	
-	public int getFrameWidth() {
+	public static int getFrameWidth() {
 		return WIDTH*SCALE;
 	}
 	
-	public int getFrameHeight() {
+	public static int getFrameHeight() {
 		return HEIGHT*SCALE;
 	}
 	
 	public void tick() {
-		handler.tick();
+		if(playing)handler.tick();
 		
-		for(Entity en:handler.entity) {
+		for(int i=0;i<handler.entity.size();i++) {
+			Entity en = handler.entity.get(i);
 			if(en.getId()==Id.player) {
 				if(!en.goingDownPipe) cam.tick(en);
 			}

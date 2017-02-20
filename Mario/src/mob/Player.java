@@ -8,6 +8,7 @@ import Main.Handler;
 import Main.Id;
 import block.Block;
 import entity.Entity;
+import states.BossState;
 import states.PlayerState;
 
 public class Player extends Entity {
@@ -78,12 +79,11 @@ public class Player extends Entity {
 				if(getBoundsBottom().intersects(bl.getBounds())) {
 					setVelY(0);
 					if(falling) falling = false;
-					
-					if(!falling&&!jumping) {
+				}else if(!falling&&!jumping) {
 						gravity = 0.8;
 						falling = true;
 					}
-				}
+				
 				if(getBoundsLeft().intersects(bl.getBounds())) {
 					setVelX(0);
 					x = bl.getX()+bl.width;
@@ -125,9 +125,21 @@ public class Player extends Entity {
 					en.die();
 				}
 				//collision with enemy
-			} else if(en.getId()==Id.enemy) {
+			} else if(en.getId()==Id.enemy||en.getId()==Id.towerBoss) {
 				if(getBoundsBottom().intersects(en.getBoundsTop())) {
-					en.die();
+					if(en.getId()!=Id.towerBoss) en.die();
+					else if(en.attackable) {
+						en.hp--;
+						en.falling = true;
+						en.gravity = 3.0;
+						en.bossState = BossState.RECOVERING;
+						en.attackable = false;
+						en.phaseTime = 0;
+						
+						jumping = true;
+						falling = false;
+						gravity = 3.5;
+					}
 					//When you have powerup activated you turn small if you hit the enemy
 				} else if(getBounds().intersects(en.getBounds())) {
 					if(state==PlayerState.BIG) {
@@ -142,6 +154,7 @@ public class Player extends Entity {
 					die();
 				}
 			}
+				//Coin counter
 		}else if(en.getId()==Id.coin) {
 			if(getBounds().intersects(en.getBounds())&&en.getId()==Id.coin) {
 				Game.coins++;
