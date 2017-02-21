@@ -12,9 +12,11 @@ import entity.Entity;
 public class Mushroom extends Entity {
 	
 	private Random random = new Random();
-	//Mushroom constructor
-	public Mushroom(int x, int y, int width, int height, Id id, Handler handler, int originalWidth) {
+		//Mushroom constructor
+	public Mushroom(int x, int y, int width, int height, Id id, Handler handler, int originalWidth, int type) {
 		super(x, y, width, height, id, handler, originalWidth);
+		this.type = type;
+		
 		
 		int dir = random.nextInt(2);
 		
@@ -30,7 +32,15 @@ public class Mushroom extends Entity {
 	}
 	//Mushroom image render
 	public void render(Graphics g) {
-		g.drawImage(Game.mushroom.getBufferedImage(),x,y,width,height,null);
+		switch(getType()) {
+		case 0:
+			g.drawImage(Game.mushroom.getBufferedImage(),x,y,width,height,null);
+			break;
+		case 1:
+			g.drawImage(Game.redShroom.getBufferedImage(),x,y,width,height,null);
+			break;
+		}
+	
 	}
 	public void tick() {
 	x+=velX;

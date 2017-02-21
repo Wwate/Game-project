@@ -29,10 +29,10 @@ public class Handler {
 	
 	public void render(Graphics g) {
 		for(Entity en:entity) {
-			en.render(g);
+			if(Game.getVisibleArea()!=null&&en.getBounds().intersects(Game.getVisibleArea())) en.render(g);
 		}
 		for(Block bl:block) {
-			bl.render(g);
+			if(Game.getVisibleArea()!=null&&bl.getBounds().intersects(Game.getVisibleArea())) bl.render(g);
 		}
 	}
 	
@@ -41,7 +41,7 @@ public class Handler {
 			en.tick();
 		}
 		for(Block bl:block) {
-			bl.tick();
+			if(Game.getVisibleArea()!=null&&bl.getBounds().intersects(Game.getVisibleArea())) bl.tick();
 		}
 		
 	}
@@ -75,11 +75,10 @@ public class Handler {
 				//Defines the rgb values and what it creates on the map of everything you draw on level.png
 				if(red==0&&green==0&&blue==0) addBlock(new Wall(x*64,y*64,64,64,true,Id.wall,this));
 				if(red==0&&green==0&&blue==255) addEntity(new Player(x*64,y*64,48,48,Id.player,this,64));
-				if(red==255&&green==0&&blue==0) addEntity(new Mushroom(x*64,y*64,64,64,Id.mushroom,this,64));
 				if(red==51&&green==25&&blue==0) addBlock(new Dirt(x*64,y*64,64,64,true,Id.dirt,this));
 				if(red==0&&green==255&&blue==0) addEntity(new Enemy(x*64,y*64,64,64,Id.enemy,this,64));
-				if(red==255&&green==255&&blue==0) addBlock(new PowerUpBlock(x*64,y*64,64,64,true,Id.powerUp,this,Game.mushroom));
-				if(red==0&&(green>123&&green<129)&&blue==0) addBlock(new Pipe(x*64,y*64,64,15,true,Id.pipe,this,128-green));
+				if(red==255&&green==255&&blue==0) addBlock(new PowerUpBlock(x*64,y*64,64,64,true,Id.powerUp,this,Game.redShroom,1));
+				if(red==0&&(green>123&&green<129)&&blue==0) addBlock(new Pipe(x*64,y*64,64,64*15,true,Id.pipe,this,128-green));
 				if(red==255&&green==255&&blue==133) addEntity(new Coin(x*64,y*64,64,64,Id.coin,this,64));
 				if(red==255&&green==0&&blue==255) addEntity(new TowerBoss(x*64,y*64,64,64,Id.towerBoss,this,3));
 			}

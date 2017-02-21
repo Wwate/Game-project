@@ -15,8 +15,8 @@ public class KeyInputs implements KeyListener {
 				if(en.goingDownPipe) return;
 				switch(key) {
 				case KeyEvent.VK_W:
-					for(int q=0;q<Game.handler.block.size();q++) {
-						Block bl = Game.handler.block.get(q);
+					for(int i=0;i<Game.handler.block.size();i++) {
+						Block bl = Game.handler.block.get(i);
 						if(bl.getId()==Id.pipe) {
 							if(en.getBoundsTop().intersects(bl.getBounds())) {
 								if(!en.goingDownPipe) en.goingDownPipe=true;

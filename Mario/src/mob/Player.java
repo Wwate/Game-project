@@ -42,6 +42,7 @@ public class Player extends Entity {
 		x+=velX;
 		y+=velY;
 		
+
 		if(y<=0) y=0;
 		//if(y+height>771) y = 771;
 		//if(y+height>771) y = 771 - height;
@@ -109,21 +110,31 @@ public class Player extends Entity {
 			Entity en = handler.entity.get(i);
 			//Player-mushroom interaction
 			if(en.getId()==Id.mushroom) {
-				if(getBounds().intersects(en.getBounds())) {
-					int tpX = getX();
-					int tpY = getY();
-					width+=(width/3);
-					height+=(height/3);
-					//width*=2;
-					//height*=2;
-					//setWidth(2);
-					//setHeigth(2);
-					//fixed player offset when erecting to bigger size
-					setX(tpX-getWidth()-(getWidth() / -2));
-					setY(tpY-getHeight()-(getHeight() / -2));
-					if(state==PlayerState.SMALL)state = PlayerState.BIG;
-					en.die();
+				switch(en.getType()) {
+				case 0:
+					if(getBounds().intersects(en.getBounds())) {
+						int tpX = getX();
+						int tpY = getY();
+						width+=(width/3);
+						height+=(height/3);
+						//width*=2;
+						//height*=2;
+						//setWidth(2);
+						//setHeigth(2);
+						//fixed player offset when erecting to bigger size
+						setX(tpX-getWidth()-(getWidth() / -2));
+						setY(tpY-getHeight()-(getHeight() / -2));
+						if(state==PlayerState.SMALL)state = PlayerState.BIG;
+						en.die();
+					}
+					break;
+				case 1:
+					if(getBounds().intersects(en.getBounds())) {
+						Game.lives++;
+						en.die();
+					}
 				}
+
 				//collision with enemy
 			} else if(en.getId()==Id.enemy||en.getId()==Id.towerBoss) {
 				if(getBoundsBottom().intersects(en.getBoundsTop())) {
@@ -206,9 +217,10 @@ public class Player extends Entity {
 							pixelsTravelled+=velY;
 							break;
 						}
-						if(pixelsTravelled>=bl.height+height) {
+						if(pixelsTravelled>=bl.height) {
 							goingDownPipe=false;
 							pixelsTravelled=0;
+						}
 						}
 					}
 
@@ -217,6 +229,6 @@ public class Player extends Entity {
 		}
 	}
 
-}
+
 
 

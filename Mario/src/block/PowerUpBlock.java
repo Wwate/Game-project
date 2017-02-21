@@ -13,9 +13,11 @@ public class PowerUpBlock extends Block {
 	private Sprite powerUp;
 	private boolean poppedUp = false;
 	private int spriteY = getY();
+	private int type;
 	//PowerupBLockconstructor
-	public PowerUpBlock(int x, int y, int width, int height, boolean solid, Id id, Handler handler,Sprite powerUp) {
+	public PowerUpBlock(int x, int y, int width, int height, boolean solid, Id id, Handler handler,Sprite powerUp, int type) {
 		super(x, y, width, height, solid, id, handler);
+		this.type = type;
 		this.powerUp = powerUp;
 	}
 	//PowerUpBlock image render
@@ -29,7 +31,7 @@ public class PowerUpBlock extends Block {
 		if(activated&&!poppedUp) {
 			spriteY--;
 			if(spriteY<=y-height) {
-				handler.addEntity(new Mushroom(x,spriteY,width,height,Id.mushroom,handler,64));
+				handler.addEntity(new Mushroom(x,spriteY,width,height,Id.mushroom,handler,64,type));
 				poppedUp = true;
 			}
 		}

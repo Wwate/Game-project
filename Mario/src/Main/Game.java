@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage image;
 	
 	public static int coins = 0;
-	public static int lives = 3;
+	public static int lives = 5;
 	public static int deathScreenTime = 0;
 	
 	public static boolean showDeathScreen = true;
@@ -55,6 +56,7 @@ public class Game extends Canvas implements Runnable {
 	public static Sprite usedPowerUp;
 	public static Sprite player[] = new Sprite[12];
 	public static Sprite mushroom;
+	public static Sprite redShroom;
 	public static Sprite dirt;
 	public static Sprite enemy[] = new Sprite[10];
 	
@@ -73,6 +75,7 @@ public class Game extends Canvas implements Runnable {
 		launcher = new Launcher();
 		mouse = new MouseInput();
 		mushroom = new Sprite(sheet,3,1);
+		redShroom = new Sprite(sheet,9,1);
 		coin = new Sprite(sheet,8,1);
 		enemy = new Sprite[10];
 		
@@ -98,7 +101,7 @@ public class Game extends Canvas implements Runnable {
 			//coin[i] = new Sprite(sheet,i+8,1);
 		//}
 		try {
-			image = ImageIO.read(getClass().getResource("/bossTest.png"));
+			image = ImageIO.read(getClass().getResource("/level.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -202,6 +205,15 @@ public class Game extends Canvas implements Runnable {
 	public static int getFrameHeight() {
 		return HEIGHT*SCALE;
 	}
+	//Improved rendering based on player position
+	public static Rectangle getVisibleArea() {
+		for(int i=0;i<handler.entity.size();i++) {
+			Entity en = handler.entity.get(i);
+			if(en.getId()==Id.player) return new Rectangle(en.getX()-(getFrameWidth()/4-5),en.getY()-(getFrameHeight()/2-5),getFrameWidth()+20,getFrameHeight()+20);
+			
+		}
+		return null;
+	}
 	
 	public void tick() {
 		if(playing)handler.tick();
@@ -212,12 +224,20 @@ public class Game extends Canvas implements Runnable {
 				if(!en.goingDownPipe) cam.tick(en);
 			}
 		}
-		if(showDeathScreen&&!gameOver) deathScreenTime++;
+		if(showDeathScreen&&!gameOver&&playing) deathScreenTime++;
 		if(deathScreenTime>=180) {
-			showDeathScreen = false;
-			deathScreenTime = 0;
-			handler.clearLevel();
-			handler.createLevel(image);
+			if(!gameOver) {
+				showDeathScreen = false;
+				deathScreenTime = 0;
+				handler.clearLevel();
+				handler.createLevel(image);
+			}else if(gameOver) {
+				showDeathScreen = false;
+				deathScreenTime = 0;
+				playing = false;
+				gameOver = false;
+			}
+
 		}
 	}
 	

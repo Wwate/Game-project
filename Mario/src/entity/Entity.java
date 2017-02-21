@@ -16,6 +16,7 @@ public abstract class Entity {
 	public int facing = 0; // 0 left, 1 right
 	public int hp;
 	public int phaseTime;
+	public int type;
 	
 	public boolean jumping = false, falling = true;
 	public boolean goingDownPipe = false;
@@ -50,7 +51,7 @@ public abstract class Entity {
 		if(getId()==Id.player) {
 			Game.lives--;
 			Game.showDeathScreen = true;
-			if(Game.lives>=0)Game.gameOver = true;
+			if(Game.lives<=0)Game.gameOver = true;
 		}
 
 	}
@@ -79,6 +80,10 @@ public abstract class Entity {
 	public void setVelY(int velY) {
 		this.velY = velY;
 	}	
+	
+	public int getType() {
+		return type;
+	}
 	public void setWidth(int modifier) {
 		width *= modifier; 
 	}
