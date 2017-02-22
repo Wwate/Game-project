@@ -37,7 +37,7 @@ public class Enemy extends Entity {
 	
 	public void render(Graphics g) {
 		if(facing == 0) {
-			g.drawImage(Game.enemy[frame+5].getBufferedImage(), x,y, width, height, null);
+			g.drawImage(Game.enemy[frame+6].getBufferedImage(), x,y, width, height, null);
 		} else if(facing == 1) {
 			g.drawImage(Game.enemy[frame].getBufferedImage(), x,y, width, height, null);
 		}

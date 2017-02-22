@@ -77,7 +77,7 @@ public class Game extends Canvas implements Runnable {
 		mushroom = new Sprite(sheet,3,1);
 		redShroom = new Sprite(sheet,9,1);
 		coin = new Sprite(sheet,8,1);
-		enemy = new Sprite[10];
+		enemy = new Sprite[12];
 		
 		addKeyListener(new KeyInputs());
 		addMouseListener(mouse);
@@ -94,7 +94,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		for(int i=0;i<enemy.length; i++) {
-			enemy[i] = new Sprite(sheet,i+1,16);
+			enemy[i] = new Sprite(sheet,i+1,2);
 		}
 		
 		//for(int i=0;i<coin.length;i++) {

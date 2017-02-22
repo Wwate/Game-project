@@ -15,7 +15,7 @@ public class Pipe extends Block {
 	}
 
 	public void render(Graphics g) {
-		g.setColor(new Color(128,128,128));
+		g.setColor(new Color(0,128,0));
 		g.fillRect(x,y,width,height);
 		
 	}
