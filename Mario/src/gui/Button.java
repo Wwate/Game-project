@@ -22,7 +22,7 @@ public class Button {
 		this.height = height;
 		this.label = label;
 	}
-	
+	//Button font and color
 	public void render(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Century Gothic",Font.ITALIC,40));
@@ -34,7 +34,7 @@ public class Button {
 		int stringY = (fm.getAscent() + (getHeight() - (fm.getAscent() + fm.getDescent())) / 2);
 		g.drawString(getLabel(),getX() + stringX, getY() + stringY);
 	}
-	
+	//Trigger event for different buttons
 	public void triggerEvent() {
 		if(getLabel().toLowerCase().contains("new")) Game.playing = true;
 		else if(getLabel().toLowerCase().contains("exit")) System.exit(0);

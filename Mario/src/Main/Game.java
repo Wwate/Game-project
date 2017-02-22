@@ -33,7 +33,10 @@ public class Game extends Canvas implements Runnable {
 	
 	private Thread thread;
 	private boolean running = false;
-	private BufferedImage image;
+	private static BufferedImage[] levels;
+	
+	private static int playerX, playerY;
+	private static int level = 0;
 	
 	public static int coins = 0;
 	public static int lives = 5;
@@ -59,6 +62,7 @@ public class Game extends Canvas implements Runnable {
 	public static Sprite redShroom;
 	public static Sprite dirt;
 	public static Sprite enemy[] = new Sprite[10];
+	public static Sprite flag[];// = new sprite[3];
 	
 	public Game() {
 		Dimension Size = new Dimension(WIDTH*SCALE,HEIGHT*SCALE);
@@ -78,6 +82,9 @@ public class Game extends Canvas implements Runnable {
 		redShroom = new Sprite(sheet,9,1);
 		coin = new Sprite(sheet,8,1);
 		enemy = new Sprite[12];
+		flag = new Sprite[3];
+		levels = new BufferedImage[2];
+		
 		
 		addKeyListener(new KeyInputs());
 		addMouseListener(mouse);
@@ -97,11 +104,17 @@ public class Game extends Canvas implements Runnable {
 			enemy[i] = new Sprite(sheet,i+1,2);
 		}
 		
+		for(int i=0;i<flag.length;i++) {
+			flag[i] = new Sprite(sheet,i+10,1);
+		}
+		
 		//for(int i=0;i<coin.length;i++) {
 			//coin[i] = new Sprite(sheet,i+8,1);
 		//}
 		try {
-			image = ImageIO.read(getClass().getResource("/level.png"));
+			levels[0] = ImageIO.read(getClass().getResource("/level1.png"));
+			levels[1] = ImageIO.read(getClass().getResource("/level2.png"));
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -205,14 +218,30 @@ public class Game extends Canvas implements Runnable {
 	public static int getFrameHeight() {
 		return HEIGHT*SCALE;
 	}
+	
+	public static void switchLevel() {
+		Game.level++;
+		
+		handler.clearLevel();
+		handler.createLevel(levels[level]);
+	}
+	
 	//Improved rendering based on player position
 	public static Rectangle getVisibleArea() {
 		for(int i=0;i<handler.entity.size();i++) {
 			Entity en = handler.entity.get(i);
-			if(en.getId()==Id.player) return new Rectangle(en.getX()-(getFrameWidth()/4-5),en.getY()-(getFrameHeight()/2-5),getFrameWidth()+20,getFrameHeight()+20);
+			if(en.getId()==Id.player) {
+				if(!en.goingDownPipe) {
+					playerX = en.getX();
+					playerY = en.getY();
+					
+					return new Rectangle(playerX-(getFrameWidth()/4-5),playerY-(getFrameHeight()/2-5),getFrameWidth()+20,getFrameHeight()+20);
+				}
+
+			}
 			
 		}
-		return null;
+		return  new Rectangle(playerX-(getFrameWidth()/4-5),playerY-(getFrameHeight()/2-5),getFrameWidth()+20,getFrameHeight()+20);
 	}
 	
 	public void tick() {
@@ -230,7 +259,7 @@ public class Game extends Canvas implements Runnable {
 				showDeathScreen = false;
 				deathScreenTime = 0;
 				handler.clearLevel();
-				handler.createLevel(image);
+				handler.createLevel(levels[level]);
 			}else if(gameOver) {
 				showDeathScreen = false;
 				deathScreenTime = 0;

@@ -1,84 +1,105 @@
 package mob;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
-import Main.Game;
 import Main.Handler;
 import Main.Id;
 import block.Block;
 import entity.Entity;
+import states.KoopaState;
 
-public class Enemy extends Entity {
+public class Koopa extends Entity {
+	private Random random;
 	
-	private Random random = new Random();
-	
+	private int shellCount;
 	private int frame = 0;
 	private int frameDelay = 0;
 	private boolean animate = true;
 
-	public Enemy(int x, int y, int width, int height, Id id, Handler handler, int originalWidth) {
+	public Koopa(int x, int y, int width, int height, Id id, Handler handler, int originalWidth) {
 		super(x, y, width, height, id, handler, originalWidth);
+		
+		random = new Random();
 		
 		int dir = random.nextInt(2);
 		
 		switch(dir) {
 		case 0:
-			setVelX(-1);
+			setVelX(-2);
 			facing = 0;
 			break;
 		case 1:
-			setVelX(1);
+			setVelX(2);
 			facing = 1;
 			break;
 		}
 		
+		koopaState = KoopaState.WALKING;
 	}
-	//Enemy graphics from sprite sheet
+
 	public void render(Graphics g) {
-		if(facing == 0) {
-			g.drawImage(Game.enemy[frame+6].getBufferedImage(), x,y, width, height, null);
-		} else if(facing == 1) {
-			g.drawImage(Game.enemy[frame].getBufferedImage(), x,y, width, height, null);
-		}
-		
+		if(koopaState==KoopaState.WALKING)g.setColor(Color.GREEN);
+		else g.setColor(new Color(0,128,0));
+		g.fillRect(getX(),getY(),width,height);
 	}
-	
-	
+
 	public void tick() {
 		x+=velX;
 		y+=velY;
+		
+		if(koopaState==KoopaState.SHELL) {
+			setVelX(0);
+			
+			shellCount++;
+			
+			if(shellCount>=300) {
+				shellCount = 0;
+				
+				koopaState = KoopaState.WALKING;
+			}
+			if(koopaState==KoopaState.WALKING||koopaState==KoopaState.SPINNING) {
+				shellCount = 0;
+				if(velX==0) {
+					int dir = random.nextInt(2);
+					switch(dir) {
+					case 0:
+						setVelX(-2);
+						facing = 0;
+						break;
+					case 1:
+						setVelX(2);
+						facing = 1;
+						break;
+					}
+				}
+			}
+		}
 		
 		for(Block bl:handler.block) {
 			if(!bl.solid)break;
 			if(bl.getId()==Id.wall) {
 			
 				}
-			//Enemy movement and collision
 				if(getBoundsBottom().intersects(bl.getBounds())) {
 					setVelY(0);
 					if(falling) falling = false;
-					//minor fix did not break nor fix
+
 					if(!falling) {
 						gravity = 0.8;
 						falling = true;
 					}
 				}
-				//if(getBoundsBottom().intersects(bl.getBounds())) {
-					//setVelY(0);
-					//if(falling) falling = false;
-				//} else {
-					//if(!falling) {
-						//gravity = 0.8;
-						//falling = true;
-					//}
-				//}
+
 				if(getBoundsLeft().intersects(bl.getBounds())) {
-					setVelX(1);
+					if(koopaState==KoopaState.SPINNING)setVelX(10);
+					else setVelX(2);
 					facing = 1;
 				}
 				if(getBoundsRight().intersects(bl.getBounds())) {
-					setVelX(-1);
+					if(koopaState==KoopaState.SPINNING)setVelX(-10);
+					else setVelX(-2);
 					facing = 0;
 				}
 			}
@@ -96,10 +117,7 @@ public class Enemy extends Entity {
 				}
 				frameDelay = 0;
 		}
-	
-		}
-		}
-	
 	}
 
-
+	}
+}

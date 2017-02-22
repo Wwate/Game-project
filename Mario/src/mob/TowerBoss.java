@@ -27,7 +27,7 @@ public class TowerBoss extends Entity {
 		random = new Random();
 	
 	}
-
+	//Tower boss graphics for different states
 	public void render(Graphics g) {
 		if(bossState==BossState.IDLE||bossState==BossState.SPINNING) g.setColor(Color.GRAY);
 		else if(bossState==BossState.RECOVERING) g.setColor(Color.RED);
@@ -43,7 +43,7 @@ public class TowerBoss extends Entity {
 		if(hp<=0) die();
 		
 		phaseTime++;
-		
+		//Different states for the boss
 		if((phaseTime>=180&&bossState==BossState.IDLE)||(phaseTime>=600&&bossState!=BossState.SPINNING))chooseState();
 		
 		if(bossState==BossState.RECOVERING&&phaseTime>=180) {
@@ -81,7 +81,7 @@ public class TowerBoss extends Entity {
 				gravity = 8.0;
 			}
 		}
-		
+		//Boss collision
 		for(int i=0;i<handler.block.size();i++) {
 			Block bl  = handler.block.get(i);
 			if(bl.isSolid()) {
@@ -150,7 +150,7 @@ public class TowerBoss extends Entity {
 		}
 
 	}
-	
+	//Randomly decides if the boss starts either jumping or walking
 	public void chooseState() {
 		int nextPhase = random.nextInt(2);
 		if(nextPhase==0) {

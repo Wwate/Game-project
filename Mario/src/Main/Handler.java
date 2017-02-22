@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import block.Block;
 import block.Dirt;
+import block.Flag;
 import block.Pipe;
 import block.PowerUpBlock;
 import block.Wall;
@@ -13,6 +14,7 @@ import entity.Coin;
 import entity.Entity;
 import entity.powerup.Mushroom;
 import mob.Enemy;
+import mob.Koopa;
 import mob.Player;
 import mob.TowerBoss;
 
@@ -26,7 +28,7 @@ public class Handler {
 	
 	public Handler() {
 	}
-	
+	//Improved rendering based on player positioning
 	public void render(Graphics g) {
 		for(Entity en:entity) {
 			if(Game.getVisibleArea()!=null&&en.getBounds().intersects(Game.getVisibleArea())) en.render(g);
@@ -78,9 +80,12 @@ public class Handler {
 				if(red==51&&green==25&&blue==0) addBlock(new Dirt(x*64,y*64,64,64,true,Id.dirt,this));
 				if(red==0&&green==255&&blue==0) addEntity(new Enemy(x*64,y*64,64,64,Id.enemy,this,64));
 				if(red==255&&green==255&&blue==0) addBlock(new PowerUpBlock(x*64,y*64,64,64,true,Id.powerUp,this,Game.redShroom,1));
+				if(red==255&&green==254&&blue==0) addBlock(new PowerUpBlock(x*64,y*64,64,64,true,Id.powerUp,this,Game.mushroom,0));
 				if(red==0&&(green>123&&green<129)&&blue==0) addBlock(new Pipe(x*64,y*64,64,64*15,true,Id.pipe,this,128-green));
 				if(red==255&&green==255&&blue==133) addEntity(new Coin(x*64,y*64,64,64,Id.coin,this,64));
 				if(red==255&&green==0&&blue==255) addEntity(new TowerBoss(x*64,y*64,64,64,Id.towerBoss,this,3));
+				if(red==39&&green==227&&blue==51) addEntity(new Koopa(x*64,y*64,64,64,Id.koopa,this,64));
+				if(red==0&&green==254&&blue==0) addBlock(new Flag(x*64,y*64,64,64*5,true,Id.flag,this));
 			}
 		}
 	}

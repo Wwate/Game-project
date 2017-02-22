@@ -5,7 +5,7 @@ import entity.Entity;
 public class Camera {
 	
 	public int x, y;
-	
+	//Camera follows the player
 	public void tick(Entity player) {
 		setX(-player.getX()+Game.WIDTH*1);
 		setY(-player.getY()+Game.HEIGHT*2);

@@ -2,6 +2,7 @@ package mob;
 
 //import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 import Main.Game;
 import Main.Handler;
@@ -9,11 +10,13 @@ import Main.Id;
 import block.Block;
 import entity.Entity;
 import states.BossState;
+import states.KoopaState;
 import states.PlayerState;
 
 public class Player extends Entity {
 	
 	private PlayerState state;
+	private Random random;
 	
 	private int pixelsTravelled = 0;
 	private int frame = 0;
@@ -26,6 +29,7 @@ public class Player extends Entity {
 		super(x, y, width, height, id, handler, originalWidth);
 		
 		state = PlayerState.SMALL;
+		random = new Random();
 	}
 
 	//Player image render
@@ -50,6 +54,12 @@ public class Player extends Entity {
 		else animate = false;
 		for(int i=0;i<handler.block.size();i++) {
 				Block bl  = handler.block.get(i);
+				
+				if(getBounds().intersects(bl.getBounds())) {
+					if(bl.getId()==Id.flag) Game.switchLevel();
+						
+					
+				}
 				if(bl.isSolid()&&!goingDownPipe) {
 					if(getBoundsTop().intersects(bl.getBounds())) {
 						setVelY(0);
@@ -146,12 +156,12 @@ public class Player extends Entity {
 						en.bossState = BossState.RECOVERING;
 						en.attackable = false;
 						en.phaseTime = 0;
-						
+						//Bounces the player when jumping on top of an enemy
 						jumping = true;
 						falling = false;
 						gravity = 3.5;
 					}
-					//When you have powerup activated you turn small if you hit the enemy
+					//When you have power up activated you turn small if you hit the enemy
 				} else if(getBounds().intersects(en.getBounds())) {
 					if(state==PlayerState.BIG) {
 						state = PlayerState.SMALL;
@@ -171,8 +181,56 @@ public class Player extends Entity {
 				Game.coins++;
 				en.die();
 			}
+		} else if(en.getId()==Id.koopa) {
+			if(en.koopaState == KoopaState.WALKING) {
+				if(getBoundsBottom().intersects(en.getBoundsTop())) {
+					en.koopaState = KoopaState.SHELL;
+					jumping = true;
+					falling = false;
+					gravity = 3.5;
+				} else if(getBounds().intersects(en.getBounds())) die();
+
+			} else if(en.koopaState == KoopaState.SHELL) {
+				if(getBoundsBottom().intersects(en.getBoundsTop())) {
+					en.koopaState = KoopaState.SPINNING;
+					
+					int dir = random.nextInt(2);
+					
+					switch(dir) {
+					case 0:
+						en.setVelX(-10);
+						facing = 0;
+						break;
+					case 1:
+						en.setVelX(10);
+						facing = 1;
+						break;
+					}
+					
+					jumping = true;
+					falling = false;
+					gravity = 3.5;
+				}
+				if(getBoundsLeft().intersects(en.getBoundsRight())) {
+					en.setVelX(-10);
+					en.koopaState = KoopaState.SPINNING;
+				}
+				if(getBoundsRight().intersects(en.getBoundsLeft())) {
+					en.setVelX(10);
+					en.koopaState = KoopaState.SPINNING;
+				}
+				
+			} else if(en.koopaState == KoopaState.SPINNING) {
+				if(getBoundsBottom().intersects(en.getBoundsTop())) {
+					en.koopaState = KoopaState.SHELL;
+					jumping = true;
+					falling = false;
+					gravity = 3.5;
+				} else if(getBounds().intersects(en.getBounds())) die();
+				
+			}
 		}
-		}
+	}
 		//Gravity loop
 		if(jumping&&!goingDownPipe) {
 			gravity-=0.17;
@@ -199,7 +257,6 @@ public class Player extends Entity {
 	
 		}
 		//This is for going up or down in pipes
-		//Not working at the moment
 		if(goingDownPipe) {
 			for(int i=0;i<Game.handler.block.size();i++) {
 				Block bl = Game.handler.block.get(i);

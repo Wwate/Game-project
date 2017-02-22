@@ -7,6 +7,7 @@ import Main.Game;
 import Main.Handler;
 import Main.Id;
 import states.BossState;
+import states.KoopaState;
 
 public abstract class Entity {
 	
@@ -25,6 +26,7 @@ public abstract class Entity {
 	public int velX, velY;
 	public Id id;
 	public BossState bossState;
+	public KoopaState koopaState;
 	public double gravity = 0.0;
 	public Handler handler;
 	

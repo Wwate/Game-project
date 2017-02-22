@@ -31,7 +31,7 @@ public class MouseInput implements MouseListener, MouseMotionListener {
 	public void mouseExited(MouseEvent e) {
 
 	}
-
+	//Defines what happens when mouse is pressed
 	public void mousePressed(MouseEvent e) {
 		for(int i=0;i<Game.launcher.buttons.length;i++) {
 			Button button = Game.launcher.buttons[i];

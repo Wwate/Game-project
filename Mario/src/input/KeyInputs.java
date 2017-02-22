@@ -7,7 +7,7 @@ import block.Block;
 import entity.Entity;
 
 public class KeyInputs implements KeyListener {
-
+	//Key inputs for different keys
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		for(Entity en:Game.handler.entity) {
@@ -20,13 +20,22 @@ public class KeyInputs implements KeyListener {
 						if(bl.getId()==Id.pipe) {
 							if(en.getBoundsTop().intersects(bl.getBounds())) {
 								if(!en.goingDownPipe) en.goingDownPipe=true;
+							
+								}
+
+								}
+						//Fixes the doublejump bug
+						if(bl.isSolid()) {
+							if(en.getBoundsBottom().intersects(bl.getBounds()))	{
+								if(!en.jumping) {
+									en.jumping = true;
+									en.gravity = 10.0;
+								}
 							}
 						}
 					}
-					if(!en.jumping) {
-						en.jumping = true;
-						en.gravity = 10.0;
-					}
+
+
 					break;
 					//Press S on top of a pipe to go down
 				case KeyEvent.VK_S:
