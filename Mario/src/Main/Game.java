@@ -63,6 +63,7 @@ public class Game extends Canvas implements Runnable {
 	public static Sprite dirt;
 	public static Sprite enemy[] = new Sprite[10];
 	public static Sprite flag[];// = new sprite[3];
+	public static Sprite star;
 	
 	public Game() {
 		Dimension Size = new Dimension(WIDTH*SCALE,HEIGHT*SCALE);
@@ -81,6 +82,7 @@ public class Game extends Canvas implements Runnable {
 		mushroom = new Sprite(sheet,3,1);
 		redShroom = new Sprite(sheet,9,1);
 		coin = new Sprite(sheet,8,1);
+		star = new Sprite(sheet,13,1);
 		enemy = new Sprite[12];
 		flag = new Sprite[3];
 		levels = new BufferedImage[2];

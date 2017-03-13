@@ -60,13 +60,29 @@ public abstract class Block {
 	public boolean isSolid() {
 		return solid;
 	}
+	
 
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
 	public void setVelX(int velX) {
 		this.velX = velX;
 	}
 
 	public void setVelY(int velY) {
 		this.velY = velY;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 	
 	public Rectangle getBounds() {

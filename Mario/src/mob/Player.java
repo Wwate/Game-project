@@ -146,7 +146,7 @@ public class Player extends Entity {
 				}
 
 				//collision with enemy
-			} else if(en.getId()==Id.enemy||en.getId()==Id.towerBoss) {
+			} else if(en.getId()==Id.enemy||en.getId()==Id.towerBoss||en.getId()==Id.plant) {
 				if(getBoundsBottom().intersects(en.getBoundsTop())) {
 					if(en.getId()!=Id.towerBoss) en.die();
 					else if(en.attackable) {

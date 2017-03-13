@@ -86,6 +86,8 @@ public abstract class Entity {
 	public int getType() {
 		return type;
 	}
+	
+
 	public void setWidth(int modifier) {
 		width *= modifier; 
 	}
