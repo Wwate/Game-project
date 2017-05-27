@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 import Main.Game;
+import database.Database;
 
 public class Button {
 	
@@ -38,6 +39,7 @@ public class Button {
 	public void triggerEvent() {
 		if(getLabel().toLowerCase().contains("new")) Game.playing = true;
 		else if(getLabel().toLowerCase().contains("exit")) System.exit(0);
+		else if(getLabel().toLowerCase().contains("player")) Database.execute();
 	}
 
 	public int getX() {
