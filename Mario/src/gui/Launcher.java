@@ -3,7 +3,13 @@ package gui;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import Main.Game;
+import database.Database;
 
 public class Launcher {
 	
@@ -35,20 +41,21 @@ public class Launcher {
 			myPanel.add(playerName);
 			
 			int result = JOptionPane.showConfirmDialog(null,  myPanel, "Enter a new Player", JOptionPane.OK_CANCEL_OPTION);
-			try {
+
 				if(result == JOptionPane.OK_OPTION) {
 					if(playerName.getText().length()==0) {
 						System.out.print("You didn't enter a player name!");
 						JOptionPane.showMessageDialog(null,"You didn't enter a player name!", "ERROR",JOptionPane.INFORMATION_MESSAGE);
 						
 					}else {
-						Database.PlayerQueries();
-						Database.addPlayer(playerName.getText());
+						Database db = new Database();
+						db.playerQueries();
+						db.addPlayer(playerName.getText());
+						
 						
 					}
 				}
-			}
 			
+		
 		}
-	
-}
+	}
