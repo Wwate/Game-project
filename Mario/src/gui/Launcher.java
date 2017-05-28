@@ -26,4 +26,29 @@ public class Launcher {
 		}
 	}
 	
+	//Pop up window for new player
+		public static void execute() {
+			JTextField playerName = new JTextField(20);
+			JPanel myPanel = new JPanel();
+			
+			myPanel.add(new JLabel("Player Name: "));
+			myPanel.add(playerName);
+			
+			int result = JOptionPane.showConfirmDialog(null,  myPanel, "Enter a new Player", JOptionPane.OK_CANCEL_OPTION);
+			try {
+				if(result == JOptionPane.OK_OPTION) {
+					if(playerName.getText().length()==0) {
+						System.out.print("You didn't enter a player name!");
+						JOptionPane.showMessageDialog(null,"You didn't enter a player name!", "ERROR",JOptionPane.INFORMATION_MESSAGE);
+						
+					}else {
+						Database.PlayerQueries();
+						Database.addPlayer(playerName.getText());
+						
+					}
+				}
+			}
+			
+		}
+	
 }

@@ -39,7 +39,7 @@ public class Button {
 	public void triggerEvent() {
 		if(getLabel().toLowerCase().contains("new")) Game.playing = true;
 		else if(getLabel().toLowerCase().contains("exit")) System.exit(0);
-		else if(getLabel().toLowerCase().contains("player")) Database.execute();
+		else if(getLabel().toLowerCase().contains("player")) Launcher.execute();
 	}
 
 	public int getX() {
